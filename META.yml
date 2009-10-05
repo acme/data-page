@@ -1,0 +1,23 @@
+---
+name: Data-Page
+version: 2.01
+author:
+  - |-
+    Based on code originally by Leo Lapworth, with many changes added by
+    by Leon Brocard <acme@astray.com>.
+abstract: help when paging through sets of results
+license: perl
+resources:
+  license: http://dev.perl.org/licenses/
+requires:
+  Class::Accessor::Chained::Fast: 0
+  Test::Exception: 0
+  Test::More: 0
+provides:
+  Data::Page:
+    file: lib/Data/Page.pm
+    version: 2.01
+generated_by: Module::Build version 0.280801
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.2.html
+  version: 1.2
