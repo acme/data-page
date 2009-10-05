@@ -2,6 +2,7 @@ Revision history for Perl module Data::Page:
 
 2.02
     - fix SQL documentation, spotted by Terrence Brannon
+    - added change_entries_per_page, patch by James Laver (ELPENGUIN)
 
 2.01 Wed Oct  8 15:02:25 BST 2008
     - add human-readable license to the documentation
