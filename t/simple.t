@@ -7,58 +7,60 @@ use_ok('Data::Page');
 my $name;
 
 foreach my $line (<DATA>) {
-  chomp $line;
-  next unless $line;
+    chomp $line;
+    next unless $line;
 
-  if ($line =~ /^# ?(.+)/) {
-    $name = $1;
-    next;
-  }
+    if ( $line =~ /^# ?(.+)/ ) {
+        $name = $1;
+        next;
+    }
 
-  print "Line is: $line\n";
-  my @vals = map { /^undef$/ ? undef : /^''$/ ? '' : $_ } split /\s+/, $line;
+    print "Line is: $line\n";
+    my @vals = map { /^undef$/ ? undef : /^''$/ ? '' : $_ } split /\s+/,
+        $line;
 
-  my $page = Data::Page->new(@vals[ 0, 1, 2 ]);
-  print "Old style\n";
-  check($page, $name, @vals);
+    my $page = Data::Page->new( @vals[ 0, 1, 2 ] );
+    print "Old style\n";
+    check( $page, $name, @vals );
 
-  $page = Data::Page->new();
-  $page->total_entries($vals[0]);
-  $page->entries_per_page($vals[1]);
-  $page->current_page($vals[2]);
-  print "New style\n";
-  check($page, $name, @vals);
+    $page = Data::Page->new();
+    $page->total_entries( $vals[0] );
+    $page->entries_per_page( $vals[1] );
+    $page->current_page( $vals[2] );
+    print "New style\n";
+    check( $page, $name, @vals );
 }
 
-my $page = Data::Page->new(0, 10);
-isa_ok($page, 'Data::Page');
+my $page = Data::Page->new( 0, 10 );
+isa_ok( $page, 'Data::Page' );
 my @empty;
-my @spliced = $page->splice(\@empty);
-is(scalar(@spliced), 0, "Splice on empty is empty");
+my @spliced = $page->splice( \@empty );
+is( scalar(@spliced), 0, "Splice on empty is empty" );
 
 sub check {
-  my ($page, $name, @vals) = @_;
-  isa_ok($page, 'Data::Page');
+    my ( $page, $name, @vals ) = @_;
+    isa_ok( $page, 'Data::Page' );
 
-  is($page->first_page,    $vals[3], "$name: first page");
-  is($page->last_page,     $vals[4], "$name: last page");
-  is($page->first,         $vals[5], "$name: first");
-  is($page->last,          $vals[6], "$name: last");
-  is($page->previous_page, $vals[7], "$name: previous_page");
-  is($page->current_page,  $vals[8], "$name: current_page");
-  is($page->next_page,     $vals[9], "$name: next_page");
+    is( $page->first_page,    $vals[3], "$name: first page" );
+    is( $page->last_page,     $vals[4], "$name: last page" );
+    is( $page->first,         $vals[5], "$name: first" );
+    is( $page->last,          $vals[6], "$name: last" );
+    is( $page->previous_page, $vals[7], "$name: previous_page" );
+    is( $page->current_page,  $vals[8], "$name: current_page" );
+    is( $page->next_page,     $vals[9], "$name: next_page" );
 
-  my @integers = (0 .. $vals[0] - 1);
-  @integers = $page->splice(\@integers);
-  my $integers = join ',', @integers;
-  is($integers, $vals[10], "$name: splice");
-  is($page->entries_on_this_page, $vals[11], "$name: entries_on_this_page");
+    my @integers = ( 0 .. $vals[0] - 1 );
+    @integers = $page->splice( \@integers );
+    my $integers = join ',', @integers;
+    is( $integers, $vals[10], "$name: splice" );
+    is( $page->entries_on_this_page, $vals[11],
+        "$name: entries_on_this_page" );
 
-  my $skipped = $vals[5] - 1;
-  $skipped = 0 if $skipped < 0;
-  is($page->skipped, $skipped, "$name: skipped");
-  $page->change_entries_per_page($vals[12]);
-  is($page->current_page, $vals[13], "$name: change_entries_per_page");
+    my $skipped = $vals[5] - 1;
+    $skipped = 0 if $skipped < 0;
+    is( $page->skipped, $skipped, "$name: skipped" );
+    $page->change_entries_per_page( $vals[12] );
+    is( $page->current_page, $vals[13], "$name: change_entries_per_page" );
 }
 
 # Format of test data: 0=number of entries, 1=entries per page, 2=current page,
