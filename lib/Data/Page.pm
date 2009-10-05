@@ -134,6 +134,16 @@ sub skipped {
   return $skipped;
 }
 
+sub change_entries_per_page {
+    my ($self, $new_epp) = @_;
+    
+    use integer;
+    croak("Fewer than one entry per page!") if $new_epp < 1;
+    my $new_page = 1+($self->first / $new_epp);
+    $self->entries_per_page($new_epp);
+    $self->current_page($new_page);
+}
+
 1;
 
 __END__
@@ -274,6 +284,18 @@ LIMIT clauses. It is simply $page->first - 1:
   );
   $sth->execute($date, $page->skipped, $page->entries_per_page);
 
+=head2 change_entries_per_page
+
+This method changes the number of entries per page and the current page number
+such that the L<first> item on the current page will be present on the new page.
+
+ $page->total_entries(50);
+ $page->entries_per_page(20);
+ $page->current_page(3);
+ print $page->first; # 41
+ $page->change_entries_per_page(30);
+ print $page->current_page; # 2 - the page that item 41 will show in
+
 =head1 NOTES
 
 It has been said before that this code is "too simple" for CPAN, but I
@@ -291,9 +313,13 @@ L<Data::Page::Tied>, L<Data::SpreadPagination>.
 Based on code originally by Leo Lapworth, with many changes added by
 by Leon Brocard <acme@astray.com>.
 
+=head1 CONTRIBUTORS
+
+James Laver (ELPENGUIN)
+
 =head1 COPYRIGHT
 
-Copyright (C) 2000-8, Leon Brocard
+Copyright (C) 2000-9, Leon Brocard
 
 =head1 LICENSE
 
