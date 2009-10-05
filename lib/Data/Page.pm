@@ -272,7 +272,7 @@ LIMIT clauses. It is simply $page->first - 1:
   $sth = $dbh->prepare(
     q{SELECT * FROM table ORDER BY rec_date LIMIT ?, ?}
   );
-  $sth->execute($date, $page->skipped, $page->entries_per_page);
+  $sth->execute($page->skipped, $page->entries_per_page);
 
 =head1 NOTES
 
