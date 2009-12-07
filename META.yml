@@ -1,6 +1,6 @@
 ---
 name: Data-Page
-version: 2.01
+version: 2.02
 author:
   - |-
     Based on code originally by Leo Lapworth, with many changes added by
@@ -13,11 +13,13 @@ requires:
   Class::Accessor::Chained::Fast: 0
   Test::Exception: 0
   Test::More: 0
+configure_requires:
+  Module::Build: 0.35
 provides:
   Data::Page:
     file: lib/Data/Page.pm
-    version: 2.01
-generated_by: Module::Build version 0.280801
+    version: 2.02
+generated_by: Module::Build version 0.35
 meta-spec:
-  url: http://module-build.sourceforge.net/META-spec-v1.2.html
-  version: 1.2
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4

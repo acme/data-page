@@ -1,6 +1,6 @@
 Revision history for Perl module Data::Page:
 
-2.02
+2.02 Mon Dec  7 19:45:33 GMT 2009
     - fix SQL documentation, spotted by Terrence Brannon
     - added change_entries_per_page, patch by James Laver (ELPENGUIN)
     - run perltidy on the modules
