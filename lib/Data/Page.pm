@@ -23,6 +23,7 @@ sub entries_per_page {
     my $self             = shift;
     my $entries_per_page = $_[0];
     if (@_) {
+        $self->_croak_on_incorrect_number($entries_per_page);
         croak("Fewer than one entry per page!") if $entries_per_page < 1;
         return $self->_entries_per_page_accessor(@_);
     }
@@ -32,7 +33,9 @@ sub entries_per_page {
 sub current_page {
     my $self = shift;
     if (@_) {
-        return $self->_current_page_accessor(@_);
+        my $current_page = $_[0];
+        $self->_croak_on_incorrect_number($current_page);
+        return $self->_current_page_accessor($current_page);
     }
     return $self->first_page unless defined $self->_current_page_accessor;
     return $self->first_page
@@ -45,7 +48,9 @@ sub current_page {
 sub total_entries {
     my $self = shift;
     if (@_) {
-        return $self->_total_entries_accessor(@_);
+        my $total_entries = $_[0];
+        $self->_croak_on_incorrect_number($total_entries);
+        return $self->_total_entries_accessor($_[0]);
     }
     return $self->_total_entries_accessor;
 }
@@ -141,9 +146,27 @@ sub change_entries_per_page {
 
     use integer;
     croak("Fewer than one entry per page!") if $new_epp < 1;
+    $self->_croak_on_incorrect_number($new_epp);
     my $new_page = 1 + ( $self->first / $new_epp );
     $self->entries_per_page($new_epp);
     $self->current_page($new_page);
+}
+
+sub _croak_on_incorrect_number {
+    my ( $self, $maybe_a_number ) = @_;
+
+    # I think that that Data::Page should accept only non-negitive numbers
+    # as parameters to the metods (and fail otherwise). But in the current
+    # tests there is assigning negative numbers and assigning empty string.
+    # So, I assume that this is desired behaviour. And I'm leaving it without
+    # change. This method only test that parameters are simple scalars.
+    #
+    # By the way, if non-negative logic will be implemented here it should be
+    # written as described at http://www.perlmonks.org/?node_id=614452
+
+    if (ref $maybe_a_number ne '') {
+        croak "Expected scalar, but got '$maybe_a_number'";
+    }
 }
 
 1;
